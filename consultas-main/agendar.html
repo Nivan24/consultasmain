@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendar Cita</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- jQuery UI CSS -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <style>
+        .ui-datepicker {
+            width: 100%;
+        }
+        .ui-datepicker-calendar {
+            background-color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Agendar Cita</h2>
+        <form id="appointment-form" action="procesar-form-agendar.php" method="post">
+            <div class="form-group">
+                <label for="first-name">Nombre</label>
+                <input type="text" class="form-control" id="first-name" name="first-name" required>
+            </div>
+            <div class="form-group">
+                <label for="last-name">Apellido</label>
+                <input type="text" class="form-control" id="last-name" name="last-name" required>
+            </div>
+            <div class="form-group">
+                <label for="document">Documento</label>
+                <input type="text" class="form-control" id="document" name="document" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">Teléfono</label>
+                <input type="text" class="form-control" id="phone" name="phone" required>
+            </div>
+            <div class="form-group">
+                <label for="date">Fecha</label>
+                <input type="text" class="form-control" id="date" name="date" required>
+            </div>
+            <div class="form-group">
+                <label for="time">Hora</label>
+                <select class="form-control" id="time" name="time" required>
+                    <option value="">Seleccione una hora</option>
+                    <!-- Opciones de ejemplo, puede personalizar según su horario -->
+                    <option value="09:00">09:00</option>
+                    <option value="10:00">10:00</option>
+                    <option value="11:00">11:00</option>
+                    <option value="12:00">12:00</option>
+                    <option value="13:00">13:00</option>
+                    <option value="14:00">14:00</option>
+                    <option value="15:00">15:00</option>
+                    <option value="16:00">16:00</option>
+                    <option value="17:00">17:00</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Agendar</button>
+        </form>
+        <div id="confirmation" class="mt-4 d-none">
+            <h4>Cita agendada con éxito</h4>
+            <p><strong>Nombre:</strong> <span id="confirm-name"></span></p>
+            <p><strong>Apellido:</strong> <span id="confirm-last-name"></span></p>
+            <p><strong>Documento:</strong> <span id="confirm-document"></span></p>
+            <p><strong>Teléfono:</strong> <span id="confirm-phone"></span></p>
+            <p><strong>Fecha:</strong> <span id="confirm-date"></span></p>
+            <p><strong>Hora:</strong> <span id="confirm-time"></span></p>
+        </div>
+    </div>
+
+    <!-- jQuery and jQuery UI -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        $(function() {
+            $("#date").datepicker({
+                dateFormat: 'dd-mm-yy',
+                minDate: 0 // Disable past dates
+            });
+        });
+
+        $('#appointment-form').on('submit', function(event) {
+            event.preventDefault();
+            
+            const firstName = $('#first-name').val();
+            const lastName = $('#last-name').val();
+            const document = $('#document').val();
+            const phone = $('#phone').val();
+            const date = $('#date').val();
+            const time = $('#time').val();
+            
+            $('#confirm-name').text(firstName);
+            $('#confirm-last-name').text(lastName);
+            $('#confirm-document').text(document);
+            $('#confirm-phone').text(phone);
+            $('#confirm-date').text(date);
+            $('#confirm-time').text(time);
+            
+            $('#confirmation').removeClass('d-none');
+
+            // Enviar los datos al servidor
+            $.post('procesar-form-agendar.php', {
+                'first-name': firstName,
+                'last-name': lastName,
+                'document': document,
+                'phone': phone,
+                'date': date,
+                'time': time
+            }, function(response) {
+                console.log(response);
+            });
+        });
+    </script>
+
+    <div class="container text-center">
+        <br>
+        <hr>
+        <a href="./menu.html" class="btn btn-success btn-lg fs-2 text-center">VOLVER AL INCIO</a>
+    </div>
+</body>
+</html>
